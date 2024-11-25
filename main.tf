@@ -3,28 +3,27 @@ provider "aws" {
 }
 
 resource "aws_ecr_repository" "app_repo" {
-  name                 = var.ecr_repository_name
+  name                 = "my-app-repo-narjiss"
   image_tag_mutability = "MUTABLE"
 
   tags = {
-    Name        = "${var.ecr_repository_name}-repo"
-    Environment = "Production"
     CreatedBy   = "narjiss"
+    Environment = "Production"
+    Name        = "my-app-repo-narjiss-repo"
   }
 
   lifecycle {
     prevent_destroy = true
-    ignore_changes  = [name]
   }
 }
 
 resource "aws_ecs_cluster" "app_cluster" {
-  name = var.ecs_cluster_name
+  name = "my-app-cluster-narjiss"
 
   tags = {
-    Name        = "${var.ecs_cluster_name}-cluster"
-    Environment = "Production"
     CreatedBy   = "narjiss"
+    Environment = "Production"
+    Name        = "my-app-cluster-narjiss-cluster"
   }
 
   lifecycle {
@@ -33,7 +32,7 @@ resource "aws_ecs_cluster" "app_cluster" {
 }
 
 resource "aws_ecs_task_definition" "app_task" {
-  family                = var.ecs_task_family
+  family                = "my-app-task-family-narjiss"
   container_definitions = <<DEFINITION
 [{
     "name": "app",
@@ -47,12 +46,12 @@ DEFINITION
   network_mode             = "awsvpc"
   memory                   = "512"
   cpu                      = "256"
-  execution_role_arn      = aws_iam_role.ecs_task_execution.arn
+  execution_role_arn       = aws_iam_role.ecs_task_execution.arn
 
   tags = {
-    Name        = "${var.ecs_task_family}-task-definition"
-    Environment = "Production"
     CreatedBy   = "narjiss"
+    Environment = "Production"
+    Name        = "my-app-task-family-narjiss-task-definition"
   }
 
   lifecycle {
@@ -62,7 +61,7 @@ DEFINITION
 }
 
 resource "aws_ecs_service" "app_service" {
-  name            = var.ecs_service_name
+  name            = "my-app-service-narjiss"
   cluster         = aws_ecs_cluster.app_cluster.id
   task_definition = aws_ecs_task_definition.app_task.arn
   launch_type     = "FARGATE"
@@ -75,9 +74,9 @@ resource "aws_ecs_service" "app_service" {
   desired_count = 1
 
   tags = {
-    Name        = "${var.ecs_service_name}-service"
-    Environment = "Production"
     CreatedBy   = "narjiss"
+    Environment = "Production"
+    Name        = "my-app-service-narjiss-service"
   }
 
   lifecycle {
@@ -102,9 +101,9 @@ resource "aws_iam_role" "ecs_task_execution" {
   })
 
   tags = {
-    Name        = "ecsTaskExecutionRole-narjiss"
-    Environment = "Production"
     CreatedBy   = "narjiss"
+    Environment = "Production"
+    Name        = "ecsTaskExecutionRole-narjiss"
   }
 
   lifecycle {
