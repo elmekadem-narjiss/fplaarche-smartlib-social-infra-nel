@@ -1,7 +1,3 @@
-provider "aws" {
-  region = var.aws_region
-}
-
 resource "aws_ecr_repository" "app_repo" {
   name                 = "my-app-repo-narjiss"
   image_tag_mutability = "MUTABLE"
@@ -14,7 +10,7 @@ resource "aws_ecr_repository" "app_repo" {
 
   lifecycle {
     prevent_destroy = true
-    ignore_changes  = [tags]
+    ignore_changes  = [tags] # Ignore les changements sur les tags
   }
 }
 
@@ -29,7 +25,7 @@ resource "aws_ecs_cluster" "app_cluster" {
 
   lifecycle {
     prevent_destroy = true
-    ignore_changes  = [tags]
+    ignore_changes  = [tags] # Ignore les changements sur les tags
   }
 }
 
@@ -58,7 +54,7 @@ DEFINITION
 
   lifecycle {
     prevent_destroy = true
-    ignore_changes  = [container_definitions, tags]
+    ignore_changes  = [container_definitions, tags] # Ignore les changements sur les tags et container_definitions
   }
 }
 
@@ -83,7 +79,7 @@ resource "aws_ecs_service" "app_service" {
 
   lifecycle {
     prevent_destroy = true
-    ignore_changes  = [tags]
+    ignore_changes  = [tags] # Ignore les changements sur les tags
   }
 }
 
@@ -111,7 +107,7 @@ resource "aws_iam_role" "ecs_task_execution" {
 
   lifecycle {
     prevent_destroy = true
-    ignore_changes  = [tags]
+    ignore_changes  = [tags] # Ignore les changements sur les tags
   }
 }
 
