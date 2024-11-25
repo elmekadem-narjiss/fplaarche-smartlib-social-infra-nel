@@ -1,11 +1,11 @@
 resource "aws_ecr_repository" "app_repo" {
-  name                 = "my-app-repo-narjiss"
+  name                 = var.ecr_repository_name  # Utilisation de la variable mise à jour
   image_tag_mutability = "MUTABLE"
 
   tags = {
     CreatedBy   = "narjiss"
     Environment = "Production"
-    Name        = "my-app-repo-narjiss-repo"
+    Name        = "${var.ecr_repository_name}-repo"  # Mise à jour du nom avec la variable
   }
 
   lifecycle {
@@ -15,12 +15,12 @@ resource "aws_ecr_repository" "app_repo" {
 }
 
 resource "aws_ecs_cluster" "app_cluster" {
-  name = "my-app-cluster-narjiss"
+  name = var.ecs_cluster_name  # Utilisation de la variable ECS cluster
 
   tags = {
     CreatedBy   = "narjiss"
     Environment = "Production"
-    Name        = "my-app-cluster-narjiss-cluster"
+    Name        = "${var.ecs_cluster_name}-cluster"  # Mise à jour avec la variable
   }
 
   lifecycle {
@@ -30,7 +30,7 @@ resource "aws_ecs_cluster" "app_cluster" {
 }
 
 resource "aws_ecs_task_definition" "app_task" {
-  family                = "my-app-task-family-narjiss"
+  family                = var.ecs_task_family  # Utilisation de la variable ECS task family
   container_definitions = <<DEFINITION
 [{
     "name": "app",
@@ -49,7 +49,7 @@ DEFINITION
   tags = {
     CreatedBy   = "narjiss"
     Environment = "Production"
-    Name        = "my-app-task-family-narjiss-task-definition"
+    Name        = "${var.ecs_task_family}-task-definition"  # Mise à jour avec la variable
   }
 
   lifecycle {
@@ -59,7 +59,7 @@ DEFINITION
 }
 
 resource "aws_ecs_service" "app_service" {
-  name            = "my-app-service-narjiss"
+  name            = var.ecs_service_name  # Utilisation de la variable ECS service name
   cluster         = aws_ecs_cluster.app_cluster.id
   task_definition = aws_ecs_task_definition.app_task.arn
   launch_type     = "FARGATE"
@@ -74,7 +74,7 @@ resource "aws_ecs_service" "app_service" {
   tags = {
     CreatedBy   = "narjiss"
     Environment = "Production"
-    Name        = "my-app-service-narjiss-service"
+    Name        = "${var.ecs_service_name}-service"  # Mise à jour avec la variable
   }
 
   lifecycle {
@@ -84,7 +84,7 @@ resource "aws_ecs_service" "app_service" {
 }
 
 resource "aws_iam_role" "ecs_task_execution" {
-  name = "ecsTaskExecutionRole-narjiss"
+  name = "ecsTaskExecutionRole-narjiss"  # Nom de rôle ECS spécifique
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -102,7 +102,7 @@ resource "aws_iam_role" "ecs_task_execution" {
   tags = {
     CreatedBy   = "narjiss"
     Environment = "Production"
-    Name        = "ecsTaskExecutionRole-narjiss"
+    Name        = "ecsTaskExecutionRole-narjiss"  # Mise à jour avec le nom du rôle
   }
 
   lifecycle {

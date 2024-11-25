@@ -3,7 +3,7 @@ variable "aws_region" {
 }
 
 variable "ecr_repository_name" {
-  default = "my-app-repo-narjiss"  # Ajouter 'narjiss' au nom du dépôt
+  default = "my-app-repo-social-nel"  # Nouveau nom du dépôt
 }
 
 variable "ecs_cluster_name" {
