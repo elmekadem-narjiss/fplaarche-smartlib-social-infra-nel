@@ -5,30 +5,42 @@ provider "aws" {
 resource "aws_ecr_repository" "app_repo" {
   name                 = var.ecr_repository_name
   image_tag_mutability = "MUTABLE"
+
+  lifecycle {
+    prevent_destroy = true
+    ignore_changes  = [name]
+  }
 }
 
 resource "aws_ecs_cluster" "app_cluster" {
   name = var.ecs_cluster_name
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "aws_ecs_task_definition" "app_task" {
   family                = var.ecs_task_family
   container_definitions = <<DEFINITION
-[
-  {
+[{
     "name": "app",
     "image": "${aws_ecr_repository.app_repo.repository_url}:latest",
     "memory": 512,
     "cpu": 256,
     "essential": true
-  }
-]
+}]
 DEFINITION
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   memory                   = "512"
   cpu                      = "256"
   execution_role_arn      = aws_iam_role.ecs_task_execution.arn
+
+  lifecycle {
+    prevent_destroy = true
+    ignore_changes  = [container_definitions]
+  }
 }
 
 resource "aws_ecs_service" "app_service" {
@@ -43,6 +55,10 @@ resource "aws_ecs_service" "app_service" {
   }
 
   desired_count = 1
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "aws_iam_role" "ecs_task_execution" {
@@ -60,6 +76,10 @@ resource "aws_iam_role" "ecs_task_execution" {
       }
     ]
   })
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "ecs_task_execution_attachment" {
