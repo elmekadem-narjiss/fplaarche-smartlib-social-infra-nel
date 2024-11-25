@@ -14,6 +14,7 @@ resource "aws_ecr_repository" "app_repo" {
 
   lifecycle {
     prevent_destroy = true
+    ignore_changes  = [tags]
   }
 }
 
@@ -28,6 +29,7 @@ resource "aws_ecs_cluster" "app_cluster" {
 
   lifecycle {
     prevent_destroy = true
+    ignore_changes  = [tags]
   }
 }
 
@@ -56,7 +58,7 @@ DEFINITION
 
   lifecycle {
     prevent_destroy = true
-    ignore_changes  = [container_definitions]
+    ignore_changes  = [container_definitions, tags]
   }
 }
 
@@ -81,6 +83,7 @@ resource "aws_ecs_service" "app_service" {
 
   lifecycle {
     prevent_destroy = true
+    ignore_changes  = [tags]
   }
 }
 
@@ -108,6 +111,7 @@ resource "aws_iam_role" "ecs_task_execution" {
 
   lifecycle {
     prevent_destroy = true
+    ignore_changes  = [tags]
   }
 }
 
