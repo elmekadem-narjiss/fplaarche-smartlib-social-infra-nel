@@ -3,22 +3,21 @@ variable "aws_region" {
 }
 
 variable "ecr_repository_name" {
-  default = "my-app-repo"
+  default = "my-app-repo-narjiss"  # Ajouter 'narjiss' au nom du dépôt
 }
 
 variable "ecs_cluster_name" {
-  default = "my-app-cluster"
+  default = "my-app-cluster-narjiss"  # Ajouter 'narjiss' au nom du cluster
 }
 
 variable "ecs_task_family" {
-  default = "my-app-task-family"
+  default = "my-app-task-family-narjiss"  # Ajouter 'narjiss' au nom de la famille de tâches
 }
 
 variable "ecs_service_name" {
-  default = "my-app-service"
+  default = "my-app-service-narjiss"  # Ajouter 'narjiss' au nom du service ECS
 }
 
 variable "subnet_ids" {
   type = list(string)
 }
-

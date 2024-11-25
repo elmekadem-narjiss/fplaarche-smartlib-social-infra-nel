@@ -1,7 +1,3 @@
-provider "aws" {
-  region = var.aws_region
-}
-
 resource "aws_ecr_repository" "app_repo" {
   name                 = var.ecr_repository_name
   image_tag_mutability = "MUTABLE"
@@ -62,7 +58,7 @@ resource "aws_ecs_service" "app_service" {
 }
 
 resource "aws_iam_role" "ecs_task_execution" {
-  name = "ecsTaskExecutionRole"
+  name = "ecsTaskExecutionRole-narjiss"  # Ajoutez 'narjiss' ici également
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
