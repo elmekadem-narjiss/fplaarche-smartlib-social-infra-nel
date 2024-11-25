@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "eu-north-1"  # Update to your desired AWS region
+  region = "eu-north-1"  # Mettre à jour avec la région AWS désirée
 }
 
 resource "aws_ecr_repository" "app_repo" {
@@ -22,7 +22,7 @@ resource "aws_ecs_cluster" "app_cluster" {
 }
 
 resource "aws_iam_role" "ecs_task_execution" {
-  name = "prod-ecsTaskExecutionRole-narjiss"  # Adding "prod-" as a prefix to avoid conflicts
+  name = "prod-ecsTaskExecutionRole-narjiss"  # Ajout du préfixe "prod-" pour éviter les conflits
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -89,12 +89,4 @@ resource "aws_ecs_service" "app_service" {
     Environment = "Production"
     Name        = "my-app-service-narjiss-service"
   }
-}
-
-output "ecr_repository_url" {
-  value = aws_ecr_repository.app_repo.repository_url
-}
-
-output "ecs_cluster_id" {
-  value = aws_ecs_cluster.app_cluster.id
 }
