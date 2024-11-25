@@ -1,6 +1,16 @@
+provider "aws" {
+  region = var.aws_region
+}
+
 resource "aws_ecr_repository" "app_repo" {
   name                 = var.ecr_repository_name
   image_tag_mutability = "MUTABLE"
+
+  tags = {
+    Name        = "${var.ecr_repository_name}-repo"
+    Environment = "Production"
+    CreatedBy   = "narjiss"
+  }
 
   lifecycle {
     prevent_destroy = true
@@ -10,6 +20,12 @@ resource "aws_ecr_repository" "app_repo" {
 
 resource "aws_ecs_cluster" "app_cluster" {
   name = var.ecs_cluster_name
+
+  tags = {
+    Name        = "${var.ecs_cluster_name}-cluster"
+    Environment = "Production"
+    CreatedBy   = "narjiss"
+  }
 
   lifecycle {
     prevent_destroy = true
@@ -33,6 +49,12 @@ DEFINITION
   cpu                      = "256"
   execution_role_arn      = aws_iam_role.ecs_task_execution.arn
 
+  tags = {
+    Name        = "${var.ecs_task_family}-task-definition"
+    Environment = "Production"
+    CreatedBy   = "narjiss"
+  }
+
   lifecycle {
     prevent_destroy = true
     ignore_changes  = [container_definitions]
@@ -52,13 +74,19 @@ resource "aws_ecs_service" "app_service" {
 
   desired_count = 1
 
+  tags = {
+    Name        = "${var.ecs_service_name}-service"
+    Environment = "Production"
+    CreatedBy   = "narjiss"
+  }
+
   lifecycle {
     prevent_destroy = true
   }
 }
 
 resource "aws_iam_role" "ecs_task_execution" {
-  name = "ecsTaskExecutionRole-narjiss"  # Ajoutez 'narjiss' ici également
+  name = "ecsTaskExecutionRole-narjiss"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -73,6 +101,12 @@ resource "aws_iam_role" "ecs_task_execution" {
     ]
   })
 
+  tags = {
+    Name        = "ecsTaskExecutionRole-narjiss"
+    Environment = "Production"
+    CreatedBy   = "narjiss"
+  }
+
   lifecycle {
     prevent_destroy = true
   }
@@ -81,4 +115,10 @@ resource "aws_iam_role" "ecs_task_execution" {
 resource "aws_iam_role_policy_attachment" "ecs_task_execution_attachment" {
   role       = aws_iam_role.ecs_task_execution.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+
+  tags = {
+    Name        = "ecsTaskExecutionPolicyAttachment"
+    Environment = "Production"
+    CreatedBy   = "narjiss"
+  }
 }
