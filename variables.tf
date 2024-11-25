@@ -1,21 +1,21 @@
 variable "aws_region" {
-  default = "eu-north-1"  # Remplacez par votre région
+  default = "eu-north-1"  # Remplacez par votre région AWS désirée
 }
 
 variable "ecr_repository_name" {
-  default = "my-app-repo-social-nel"  # Nouveau nom du dépôt
+  default = "dev-fplarache-smartlib-social-nel"  # Nouveau nom du dépôt avec un préfixe "dev"
 }
 
 variable "ecs_cluster_name" {
-  default = "my-app-cluster-narjiss"  # Ajouter 'narjiss' au nom du cluster
+  default = "dev-fplarache-smartlib-cluster-nel"  # Nouveau nom du cluster avec un préfixe "dev"
 }
 
 variable "ecs_task_family" {
-  default = "my-app-task-family-narjiss"  # Ajouter 'narjiss' au nom de la famille de tâches
+  default = "dev-fplarache-smartlib-task-family-nel"  # Nouveau nom de la famille de tâches avec un préfixe "dev"
 }
 
 variable "ecs_service_name" {
-  default = "my-app-service-narjiss"  # Ajouter 'narjiss' au nom du service ECS
+  default = "dev-fplarache-smartlib-service-nel"  # Nouveau nom du service ECS avec un préfixe "dev"
 }
 
 variable "subnet_ids" {

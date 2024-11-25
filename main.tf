@@ -1,23 +1,23 @@
 provider "aws" {
-  region = "eu-north-1"  # Mettre à jour avec la région AWS désirée
+  region = var.aws_region  # Utilisation de la variable région définie dans variables.tf
 }
 
 resource "aws_ecr_repository" "app_repo" {
-  name                 = "my-app-repo-social-nel"
+  name                 = var.ecr_repository_name  # Utilisation de la variable pour le nom du dépôt
   image_tag_mutability = "MUTABLE"
   tags = {
     CreatedBy   = "narjiss"
     Environment = "Production"
-    Name        = "my-app-repo-social-nel-repo"
+    Name        = "dev-fplarache-smartlib-service-nel-repo"
   }
 }
 
 resource "aws_ecs_cluster" "app_cluster" {
-  name = "my-app-cluster-narjiss"
+  name = var.ecs_cluster_name  # Utilisation de la variable pour le nom du cluster
   tags = {
     CreatedBy   = "narjiss"
     Environment = "Production"
-    Name        = "my-app-cluster-narjiss-cluster"
+    Name        = "dev-fplarache-smartlib-service-nel-cluster"
   }
 }
 
@@ -40,7 +40,7 @@ resource "aws_iam_role" "ecs_task_execution" {
   tags = {
     CreatedBy   = "narjiss"
     Environment = "Production"
-    Name        = "prod-ecsTaskExecutionRole-narjiss"
+    Name        = "dev-fplarache-smartlib-service-nel-ecsTaskExecutionRole"
   }
 }
 
@@ -50,7 +50,7 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_attachment" {
 }
 
 resource "aws_ecs_task_definition" "app_task" {
-  family                   = "my-app-task-family-narjiss"
+  family                   = var.ecs_task_family  # Utilisation de la variable pour le nom de la famille de tâches
   cpu                      = "256"
   memory                   = "512"
   network_mode             = "awsvpc"
@@ -58,8 +58,8 @@ resource "aws_ecs_task_definition" "app_task" {
   execution_role_arn       = aws_iam_role.ecs_task_execution.arn
 
   container_definitions = jsonencode([{
-    name      = "my-app-container"
-    image     = "my-app-repo-social-nel"
+    name      = "dev-fplarache-smartlib-service-nel-container"
+    image     = var.ecr_repository_name  # Utilisation de la variable pour l'image du conteneur
     cpu       = 256
     memory    = 512
     essential = true
@@ -68,12 +68,12 @@ resource "aws_ecs_task_definition" "app_task" {
   tags = {
     CreatedBy   = "narjiss"
     Environment = "Production"
-    Name        = "my-app-task-family-narjiss-task-definition"
+    Name        = "dev-fplarache-smartlib-service-nel-task-definition"
   }
 }
 
 resource "aws_ecs_service" "app_service" {
-  name            = "my-app-service-narjiss"
+  name            = var.ecs_service_name  # Utilisation de la variable pour le nom du service ECS
   cluster         = aws_ecs_cluster.app_cluster.id
   task_definition = aws_ecs_task_definition.app_task.arn
   desired_count   = 1
@@ -81,12 +81,12 @@ resource "aws_ecs_service" "app_service" {
   scheduling_strategy = "REPLICA"
   network_configuration {
     assign_public_ip = true
-    subnets          = ["subnet-09f87781e43dd92fa", "subnet-0ecad11178a197a0b"]
+    subnets          = var.subnet_ids  # Utilisation de la variable pour les sous-réseaux
   }
 
   tags = {
     CreatedBy   = "narjiss"
     Environment = "Production"
-    Name        = "my-app-service-narjiss-service"
+    Name        = "dev-fplarache-smartlib-service-nel-service"
   }
 }
